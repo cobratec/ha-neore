@@ -1,0 +1,195 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tepelné čerpadlo NeoRé",
+        "description": "Připojení k řídicí jednotce tepelného čerpadla přes Modbus TCP.",
+        "data": {
+          "name": "Název",
+          "host": "IP adresa",
+          "port": "Port",
+          "unit_id": "Modbus unit ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Z tepelného čerpadla nelze načíst data. Zkontrolujte IP adresu, port a unit ID.",
+      "connection_conflict": "Toto čerpadlo už používá jiná integrace s jiným nastavením spojení."
+    },
+    "abort": {
+      "already_configured": "Toto tepelné čerpadlo už je nastavené."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nastavení NeoRé",
+        "data": {
+          "scan_interval": "Interval čtení (s)",
+          "setpoint_min": "Minimální teplota TUV (°C)",
+          "setpoint_max": "Maximální teplota TUV (°C)"
+        }
+      }
+    },
+    "error": {
+      "invalid_range": "Minimum musí být menší než maximum."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "name": "Venkovní teplota"
+      },
+      "indoor_temperature": {
+        "name": "Vnitřní teplota"
+      },
+      "output_temperature": {
+        "name": "Teplota výstupu"
+      },
+      "return_temperature": {
+        "name": "Teplota zpátečky"
+      },
+      "hot_water_temperature": {
+        "name": "Teplota TUV"
+      },
+      "status_code": {
+        "name": "Stavový kód"
+      },
+      "heating_water_target": {
+        "name": "Požadovaná teplota topné vody"
+      },
+      "iq_correction": {
+        "name": "IQ korekce"
+      },
+      "circulation_pump": {
+        "name": "Výkon oběhového čerpadla"
+      },
+      "flow": {
+        "name": "Průtok vody"
+      },
+      "water_pressure": {
+        "name": "Tlak vody"
+      },
+      "thermal_power": {
+        "name": "Tepelný výkon"
+      },
+      "heat_energy": {
+        "name": "Dodané teplo"
+      },
+      "operating_hours": {
+        "name": "Motohodiny"
+      },
+      "compressor_output": {
+        "name": "Výkon kompresoru"
+      },
+      "hot_water_hysteresis": {
+        "name": "Hystereze TUV"
+      },
+      "disinfection_temperature": {
+        "name": "Teplota dezinfekce"
+      },
+      "heater_delay": {
+        "name": "Zpoždění el. dohřevu TUV"
+      },
+      "status_text": {
+        "name": "Popis stavu"
+      }
+    },
+    "binary_sensor": {
+      "error": {
+        "name": "Porucha"
+      },
+      "running": {
+        "name": "Chod"
+      },
+      "hot_water_heating": {
+        "name": "Ohřev TUV"
+      },
+      "hot_water_electric": {
+        "name": "El. dohřev TUV"
+      },
+      "bivalence": {
+        "name": "Bivalence"
+      },
+      "bivalence_stage_1": {
+        "name": "Bivalence 1. stupeň"
+      },
+      "bivalence_stage_2": {
+        "name": "Bivalence 2. stupeň"
+      },
+      "circulation_pump_running": {
+        "name": "Oběhové čerpadlo"
+      },
+      "high_tariff": {
+        "name": "Vysoký tarif"
+      },
+      "setback": {
+        "name": "Útlum"
+      },
+      "defrost": {
+        "name": "Odtávání"
+      },
+      "disinfection_running": {
+        "name": "Dezinfekce"
+      },
+      "heating_enabled": {
+        "name": "Topení zapnuto"
+      },
+      "hot_water_enabled": {
+        "name": "TUV zapnuto"
+      },
+      "warm_up": {
+        "name": "Zahřívání"
+      },
+      "frost_protection": {
+        "name": "Protizámrazová ochrana"
+      },
+      "venting": {
+        "name": "Odvzdušnění"
+      },
+      "hot_water_high_tariff": {
+        "name": "Vysoký tarif TUV"
+      },
+      "hot_water_time_blocked": {
+        "name": "TUV blokována časovým programem"
+      },
+      "economy": {
+        "name": "Ekonomický provoz"
+      },
+      "outdoor_too_cold": {
+        "name": "Příliš nízká venkovní teplota"
+      },
+      "secondary_source": {
+        "name": "Sekundární zdroj"
+      },
+      "floor_drying": {
+        "name": "Vysoušení podlahy"
+      }
+    },
+    "number": {
+      "hot_water_setpoint": {
+        "name": "Požadovaná teplota TUV"
+      },
+      "room_setpoint": {
+        "name": "Požadovaná teplota objektu"
+      },
+      "curve_m20": {
+        "name": "Ekvitermní křivka pro −20 °C"
+      },
+      "curve_m7": {
+        "name": "Ekvitermní křivka pro −7 °C"
+      },
+      "curve_p6": {
+        "name": "Ekvitermní křivka pro +6 °C"
+      },
+      "curve_p19": {
+        "name": "Ekvitermní křivka pro +19 °C"
+      }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Teplá voda"
+      }
+    }
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "default": "mdi:sun-thermometer"
+      },
+      "indoor_temperature": {
+        "default": "mdi:home-thermometer"
+      },
+      "output_temperature": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "return_temperature": {
+        "default": "mdi:thermometer-chevron-down"
+      },
+      "hot_water_temperature": {
+        "default": "mdi:water-boiler"
+      },
+      "heating_water_target": {
+        "default": "mdi:thermometer-auto"
+      },
+      "iq_correction": {
+        "default": "mdi:plus-minus-variant"
+      },
+      "compressor_output": {
+        "default": "mdi:heat-pump"
+      },
+      "circulation_pump": {
+        "default": "mdi:pump"
+      },
+      "flow": {
+        "default": "mdi:waves-arrow-right"
+      },
+      "water_pressure": {
+        "default": "mdi:gauge"
+      },
+      "thermal_power": {
+        "default": "mdi:heat-wave"
+      },
+      "heat_energy": {
+        "default": "mdi:fire"
+      },
+      "operating_hours": {
+        "default": "mdi:timer-outline"
+      },
+      "hot_water_hysteresis": {
+        "default": "mdi:arrow-expand-vertical"
+      },
+      "disinfection_temperature": {
+        "default": "mdi:bacteria-outline"
+      },
+      "heater_delay": {
+        "default": "mdi:timer-sand"
+      },
+      "status_code": {
+        "default": "mdi:alert-circle-outline"
+      },
+      "status_text": {
+        "default": "mdi:information-outline"
+      }
+    },
+    "binary_sensor": {
+      "running": {
+        "default": "mdi:heat-pump-outline",
+        "state": {
+          "on": "mdi:heat-pump"
+        }
+      },
+      "hot_water_heating": {
+        "default": "mdi:water-boiler-off",
+        "state": {
+          "on": "mdi:water-boiler"
+        }
+      },
+      "hot_water_electric": {
+        "default": "mdi:heating-coil"
+      },
+      "bivalence": {
+        "default": "mdi:heating-coil"
+      },
+      "bivalence_stage_1": {
+        "default": "mdi:numeric-1-box-outline"
+      },
+      "bivalence_stage_2": {
+        "default": "mdi:numeric-2-box-outline"
+      },
+      "circulation_pump_running": {
+        "default": "mdi:pump"
+      },
+      "high_tariff": {
+        "default": "mdi:transmission-tower",
+        "state": {
+          "on": "mdi:transmission-tower-off"
+        }
+      },
+      "hot_water_high_tariff": {
+        "default": "mdi:transmission-tower",
+        "state": {
+          "on": "mdi:transmission-tower-off"
+        }
+      },
+      "hot_water_time_blocked": {
+        "default": "mdi:clock-check-outline",
+        "state": {
+          "on": "mdi:clock-alert-outline"
+        }
+      },
+      "setback": {
+        "default": "mdi:white-balance-sunny",
+        "state": {
+          "on": "mdi:weather-night"
+        }
+      },
+      "defrost": {
+        "default": "mdi:snowflake",
+        "state": {
+          "on": "mdi:snowflake-melt"
+        }
+      },
+      "disinfection_running": {
+        "default": "mdi:bacteria-outline",
+        "state": {
+          "on": "mdi:bacteria"
+        }
+      },
+      "economy": {
+        "default": "mdi:sprout-outline",
+        "state": {
+          "on": "mdi:sprout"
+        }
+      },
+      "heating_enabled": {
+        "default": "mdi:radiator-off",
+        "state": {
+          "on": "mdi:radiator"
+        }
+      },
+      "hot_water_enabled": {
+        "default": "mdi:water-boiler-off",
+        "state": {
+          "on": "mdi:water-boiler"
+        }
+      },
+      "warm_up": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "frost_protection": {
+        "default": "mdi:snowflake-alert"
+      },
+      "venting": {
+        "default": "mdi:pipe-valve"
+      },
+      "outdoor_too_cold": {
+        "default": "mdi:thermometer",
+        "state": {
+          "on": "mdi:snowflake-thermometer"
+        }
+      },
+      "secondary_source": {
+        "default": "mdi:fireplace"
+      },
+      "floor_drying": {
+        "default": "mdi:hair-dryer-outline",
+        "state": {
+          "on": "mdi:hair-dryer"
+        }
+      }
+    },
+    "number": {
+      "hot_water_setpoint": {
+        "default": "mdi:water-thermometer"
+      },
+      "room_setpoint": {
+        "default": "mdi:home-thermometer-outline"
+      },
+      "curve_m20": {
+        "default": "mdi:chart-line"
+      },
+      "curve_m7": {
+        "default": "mdi:chart-line"
+      },
+      "curve_p6": {
+        "default": "mdi:chart-line"
+      },
+      "curve_p19": {
+        "default": "mdi:chart-line"
+      }
+    }
+  }
+}

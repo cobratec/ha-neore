@@ -1,0 +1,195 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "NeoRé heat pump",
+        "description": "Connect to the heat pump controller over Modbus TCP.",
+        "data": {
+          "name": "Name",
+          "host": "IP address",
+          "port": "Port",
+          "unit_id": "Modbus unit ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot read data from the heat pump. Check the IP address, port and unit ID.",
+      "connection_conflict": "This heat pump is already used by another integration with different connection settings."
+    },
+    "abort": {
+      "already_configured": "This heat pump is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "NeoRé options",
+        "data": {
+          "scan_interval": "Polling interval (seconds)",
+          "setpoint_min": "Minimum hot water setpoint (°C)",
+          "setpoint_max": "Maximum hot water setpoint (°C)"
+        }
+      }
+    },
+    "error": {
+      "invalid_range": "Minimum must be lower than maximum."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "indoor_temperature": {
+        "name": "Indoor temperature"
+      },
+      "output_temperature": {
+        "name": "Output temperature"
+      },
+      "return_temperature": {
+        "name": "Return temperature"
+      },
+      "hot_water_temperature": {
+        "name": "Hot water temperature"
+      },
+      "status_code": {
+        "name": "Status code"
+      },
+      "heating_water_target": {
+        "name": "Heating water target"
+      },
+      "iq_correction": {
+        "name": "IQ correction"
+      },
+      "circulation_pump": {
+        "name": "Circulation pump output"
+      },
+      "flow": {
+        "name": "Water flow"
+      },
+      "water_pressure": {
+        "name": "Water pressure"
+      },
+      "thermal_power": {
+        "name": "Thermal power"
+      },
+      "heat_energy": {
+        "name": "Heat delivered"
+      },
+      "operating_hours": {
+        "name": "Operating hours"
+      },
+      "compressor_output": {
+        "name": "Compressor output"
+      },
+      "hot_water_hysteresis": {
+        "name": "Hot water hysteresis"
+      },
+      "disinfection_temperature": {
+        "name": "Disinfection temperature"
+      },
+      "heater_delay": {
+        "name": "Electric heater delay"
+      },
+      "status_text": {
+        "name": "Status description"
+      }
+    },
+    "binary_sensor": {
+      "error": {
+        "name": "Error"
+      },
+      "running": {
+        "name": "Running"
+      },
+      "hot_water_heating": {
+        "name": "Hot water heating"
+      },
+      "hot_water_electric": {
+        "name": "Hot water electric heater"
+      },
+      "bivalence": {
+        "name": "Bivalent heater"
+      },
+      "bivalence_stage_1": {
+        "name": "Bivalent stage 1"
+      },
+      "bivalence_stage_2": {
+        "name": "Bivalent stage 2"
+      },
+      "circulation_pump_running": {
+        "name": "Circulation pump"
+      },
+      "high_tariff": {
+        "name": "High tariff"
+      },
+      "setback": {
+        "name": "Setback"
+      },
+      "defrost": {
+        "name": "Defrost"
+      },
+      "disinfection_running": {
+        "name": "Disinfection"
+      },
+      "heating_enabled": {
+        "name": "Heating enabled"
+      },
+      "hot_water_enabled": {
+        "name": "Hot water enabled"
+      },
+      "warm_up": {
+        "name": "Warm-up"
+      },
+      "frost_protection": {
+        "name": "Frost protection"
+      },
+      "venting": {
+        "name": "Venting"
+      },
+      "hot_water_high_tariff": {
+        "name": "Hot water high tariff"
+      },
+      "hot_water_time_blocked": {
+        "name": "Hot water blocked by schedule"
+      },
+      "economy": {
+        "name": "Economy mode"
+      },
+      "outdoor_too_cold": {
+        "name": "Outdoor too cold (bivalent only)"
+      },
+      "secondary_source": {
+        "name": "Secondary source"
+      },
+      "floor_drying": {
+        "name": "Floor drying"
+      }
+    },
+    "number": {
+      "hot_water_setpoint": {
+        "name": "Hot water setpoint"
+      },
+      "room_setpoint": {
+        "name": "Room setpoint"
+      },
+      "curve_m20": {
+        "name": "Heating curve at −20 °C"
+      },
+      "curve_m7": {
+        "name": "Heating curve at −7 °C"
+      },
+      "curve_p6": {
+        "name": "Heating curve at +6 °C"
+      },
+      "curve_p19": {
+        "name": "Heating curve at +19 °C"
+      }
+    },
+    "water_heater": {
+      "hot_water": {
+        "name": "Hot water"
+      }
+    }
+  }
+}
