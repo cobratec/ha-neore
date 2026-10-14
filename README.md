@@ -34,15 +34,33 @@ třeba pro ukládání přebytků z fotovoltaiky do bojleru.
 | Průtok vody | `sensor` | m³/h |
 | Tlak vody | `sensor` | bar |
 | Tepelný výkon | `sensor` | kW (kalorimetr) |
-| Dodané teplo | `sensor` | kWh, rostoucí – lze použít v Energy dashboardu a pro výpočet COP |
+| Dodané teplo | `sensor` | kWh z kalorimetru – lze použít v Energy dashboardu a pro výpočet COP (při odtávání může mírně klesnout, viz níže) |
 | Motohodiny | `sensor` (diagnostika) | h |
-| Výkon kompresoru | `sensor` | % (požadovaný výkon) |
+| Výkon kompresoru | `sensor` | % – **požadavek regulace**, ne skutečný výkon (viz níže) |
 | Hystereze TUV, teplota dezinfekce, zpoždění el. dohřevu | `sensor` (diagnostika) | aktuální nastavení |
 | Stavový kód, Popis stavu | `sensor` (diagnostika) | kód a texty jako na displeji, např. `0073` |
 | Porucha | `binary_sensor` | zapnuto, když čerpadlo hlásí poruchu |
 | Chod, Ohřev TUV, El. dohřev TUV, Bivalence, Oběhové čerpadlo | `binary_sensor` | stav provozu |
-| Vysoký tarif, Útlum, Odtávání, Dezinfekce | `binary_sensor` | stav provozu |
+| Vysoký tarif, Útlum, Dezinfekce | `binary_sensor` | stav provozu |
+| Odtávání | `binary_sensor` (ve výchozím stavu vypnuto) | jen s komunikačním modulem MX, viz níže |
 | Další stavy | `binary_sensor` (diagnostika) | topení/TUV zapnuto, stupně bivalence, zahřívání, protizámrazová ochrana, odvzdušnění |
+
+### Jak číst stav provozu
+
+- **Chod** a **Tepelný výkon** ukazují, zda kompresor skutečně topí. Chod se odvozuje
+  z tepelného výkonu (≥ 0,5 kW).
+- **Výkon kompresoru** je požadavek regulace (stejné číslo jako na webu čerpadla). Může
+  ukazovat např. 80 %, i když kompresor stojí – třeba když při ohřevu TUV dosáhl ochranné
+  teploty výstupu.
+- **Ohřev TUV** znamená, že je aktivní režim TUV (ventil přepnutý na bojler). Respektuje
+  blokaci vysokým tarifem.
+- **Dodané teplo** je čítač kalorimetru čerpadla. Teplo odebrané zpět z vody (odtávání,
+  oběh přes bojler při stojícím kompresoru) kalorimetr odečítá, čítač proto může krátce
+  klesnout. Entita má `state_class: total`, Energy dashboard i `utility_meter` to zvládají.
+- **Odtávání:** u split jednotek (Fujitsu) řídí odtávání venkovní jednotka. Bez komunikačního
+  modulu MX (servisní menu: „MX kom. jednotka“ = 0) o něm regulace neví a bit se nikdy
+  nenastaví, proto je entita ve výchozím stavu vypnutá. Odtávání je vidět jako krátký
+  (2–3 min) hluboký propad tepelného výkonu do záporných hodnot.
 
 Komunikace běží přes sdílené Modbus spojení vestavěné integrace `modbus` (knihovna `modbus-connection`). Čerpadlo se proto zobrazí v panelu **Nastavení → Konektivita → Modbus** a s ostatními integracemi se stejnými parametry sdílí jedno spojení. Logika zařízení je v `device.py` bez závislosti na Home Assistantu.
 
@@ -118,6 +136,12 @@ triggers:
   - trigger: time
     at: "16:30:00"
     id: stop
+  # kompresor dosáhl ochranné teploty a stojí, ale režim TUV trvá a bojler ztrácí teplo
+  - trigger: numeric_state
+    entity_id: sensor.neore_heat_pump_thermal_power
+    below: -0.3
+    for: "00:10:00"
+    id: stall
 actions:
   - choose:
       - conditions:
@@ -132,6 +156,9 @@ actions:
           - condition: numeric_state
             entity_id: sensor.solax_grid_export
             above: 3500
+          - condition: numeric_state
+            entity_id: number.neore_heat_pump_hot_water_setpoint
+            below: 52
         sequence:
           - action: number.set_value
             target:
@@ -140,7 +167,10 @@ actions:
               value: 52
       - conditions:
           - condition: trigger
-            id: stop
+            id: [stop, stall]
+          - condition: numeric_state
+            entity_id: number.neore_heat_pump_hot_water_setpoint
+            above: 48
         sequence:
           - action: number.set_value
             target:
@@ -148,6 +178,10 @@ actions:
             data:
               value: 48
 ```
+
+Ohřev TUV začíná až při poklesu pod *setpoint − hystereze* (např. 52 − 5 = 47 °C), proto
+je zvýšený setpoint záměrně nad tím, co kompresor dokáže (~50 °C v bojleru). Větev `stall`
+ohřev ukončí, jakmile kompresor dojde na ochrannou teplotu výstupu.
 
 ### Výpočet COP
 

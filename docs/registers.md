@@ -37,7 +37,7 @@ Offset = bajtový offset v paměti, registry = které registry hodnota zabírá.
 | 2062 | 1031–1032 | float | Ekviterm – aktuální požadovaná teplota topné vody °C |
 | 2079 | 1039–1041 | float | Průtok vody m³/h |
 | 2083 | 1041–1043 | float | Aktuální výkon (kalorimetr) kW |
-| 2087 | 1043–1045 | float | Dodaný výkon (kalorimetr) kWh, roste |
+| 2087 | 1043–1045 | float | Dodaný výkon (kalorimetr) kWh – čítač, při záporném výkonu (odtávání) klesá |
 | 2216 | 1108–1109 | float | Požadovaný výkon % – kopie hodnoty 2066 (integrace používá 2066) |
 | 2226 | 1113–1114 | float | Požadovaná T TUV (kopie parametru) |
 | 2295 | 1147–1149 | float | Tlak vody bar |
@@ -47,7 +47,7 @@ Offset = bajtový offset v paměti, registry = které registry hodnota zabírá.
 | 2574 | 1287–1288 | float | Teplota zpátečky °C |
 | 2591 | 1295–1297 | float | Výkon oběhového čerpadla % |
 | 4244 | 2122–2123 | float | Teplota objektu (čidlo) °C, nepoužito |
-| 2066 | 1033–1035 | float | Požadovaný výkon % (velké číslo u ventilátoru, používá web) |
+| 2066 | 1033–1035 | float | Požadovaný výkon % (velké číslo u ventilátoru, používá web) – požadavek regulace, ne skutečný výkon kompresoru |
 | 2092 | 1046–1047 | float | Vrat (kalorimetr) °C |
 | 2191 | 1095–1097 | float | Objekt °C (hodnota zobrazená na panelu) |
 | 2276 | 1138–1139 | float | IQ korekce °C (zobrazená) |
@@ -96,7 +96,7 @@ Popisy podle panelu. „Inverzní“ znamená, že panel zobrazuje popisek, kdy�
 | 8768.0 | Antilegionella – el. ohřev zásobníku (ikona legionely; podle manuálu sobota 1:00–10:00) |
 | 10302.0 | Protizámrazová ochrana |
 | 18440.0 | Odvzdušnění |
-| 18440.2 | Odtávání (ikona) |
+| 18440.2 | Odtávání (ikona) – jen s komunikačním modulem MX; u splitu Fujitsu bez modulu stále 0 |
 
 ### Texty a poruchy
 
@@ -163,3 +163,11 @@ do paměti s omezeným počtem zápisů – nezapisujte periodicky, jen při zm�
   (250 l, výměník 3 m²) to odpovídá maximu ~50 °C. Vyšší teplotu dohřívá elektrická patrona
   po uplynutí „Zpoždění el. dohřevu TUV“.
 - Příkon při ohřevu TUV (80 %) je ~3,4–3,5 kW.
+- Při ohřevu TUV se požadavek (2066) drží na hodnotě „Výkon dobíjení TUV“ (servisní menu,
+  u testovaného čerpadla 80 %), i když kompresor stojí po dosažení ochranné teploty výstupu. Ventil zůstává
+  v poloze TUV a oběhové čerpadlo vede vodu přes výměník v bojleru – bojler tak ztrácí
+  ~0,7 kW tepla, dokud požadavek neskončí (setpoint, vysoký tarif nebo el. dohřev).
+- Ohřev TUV začíná při poklesu pod *setpoint − hystereze*.
+- Servisní obrazovka „Data venkovní jednotky“ (teploty, otáčky, BDEF odtávání) je bez
+  komunikačního modulu MX prázdná – regulace s jednotkou Fujitsu komunikuje jen přes
+  požadavek výkonu.

@@ -52,7 +52,9 @@ BINARY_SENSORS: tuple[NeoreBinaryDescription, ...] = (
     _d("hot_water_time_blocked", None, D),
     _d("economy"),
     _d("setback"),
-    _d("defrost", R),
+    # Split units (Fujitsu) defrost on their own; without the MX communication
+    # module the controller never sets this bit, so it is disabled by default.
+    _d("defrost", R, enabled=False),
     _d("disinfection_running", R),
     _d("heating_enabled", None, D),
     _d("hot_water_enabled", None, D),

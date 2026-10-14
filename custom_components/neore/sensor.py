@@ -94,7 +94,10 @@ SENSORS: tuple[NeoreSensorDescription, ...] = (
         key="heat_energy",
         translation_key="heat_energy",
         device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
+        # The calorimeter subtracts heat drawn back from the water (defrost,
+        # hot water loop running with the compressor off), so the counter can
+        # decrease slightly. TOTAL allows that; TOTAL_INCREASING would not.
+        state_class=SensorStateClass.TOTAL,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         suggested_display_precision=1,
         value_fn=lambda d: d.get("heat_energy"),
@@ -159,7 +162,8 @@ async def async_setup_entry(
     async_add_entities(
         (
             NeoreTotalSensor
-            if desc.state_class is SensorStateClass.TOTAL_INCREASING
+            if desc.state_class
+            in (SensorStateClass.TOTAL, SensorStateClass.TOTAL_INCREASING)
             else NeoreSensor
         )(coordinator, desc)
         for desc in SENSORS
