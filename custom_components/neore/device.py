@@ -58,6 +58,11 @@ VALUES: dict[str, Value] = {
     "hot_water_hysteresis": Value(391),      # Požadovaná hystereze TUV
     "disinfection_temperature": Value(400),  # Požadovaná T dezinfekce TUV
     "heater_delay": Value(396, "u32"),       # Zpoždění el. dohřevu TUV (ms)
+    # settings (bits); the web server shows "on" for the tariff options when the bit is 0
+    "heating_follow_tariff": _bit(572, 0, invert=True),    # Objekt: Sledovat sazbu
+    "hot_water_follow_tariff": _bit(97, 0, invert=True),   # TUV: Sledovat sazbu pro ohřev TUV
+    "disinfection_enabled": _bit(395, 0),                  # TUV: Desinfekce
+    "circulation_enabled": _bit(343, 0),                   # TUV 2: Cirkulace TUV
     # live values
     "heating_water_target": Value(2062),     # Ekviterm – požadovaná teplota topné vody
     "compressor_output": Value(2066),        # výkon kompresoru % (velké číslo u ventilátoru)
@@ -91,6 +96,7 @@ VALUES: dict[str, Value] = {
     "hot_water_time_blocked": _bit(9041, 0, invert=True),  # ikona: ohřev TV blokován časovým programem
     "economy": _bit(18961, 0),               # ikona „e“: ekonomický provoz
     "circulation_pump_running": _bit(2603, 0),
+    "hot_water_circulation_running": _bit(2603, 5),  # ikona čerpadla v sekci TUV na přehledu
     "bivalence_stage_1": _bit(2603, 6),      # 1st.
     "bivalence_stage_2": _bit(2603, 7),      # 2st.
     "disinfection_running": _bit(8768, 0),   # ikona legionely
@@ -106,6 +112,13 @@ VALUES: dict[str, Value] = {
 }
 
 RUNNING_THRESHOLD_KW = 0.5  # thermal power from the heat meter
+
+WRITABLE_BITS = {
+    "heating_follow_tariff",
+    "hot_water_follow_tariff",
+    "disinfection_enabled",
+    "circulation_enabled",
+}
 
 WRITABLE = {
     "hot_water_target",
@@ -196,6 +209,18 @@ def plan_float_write(current: list[int], value: Value, new: float) -> list[tuple
     return [(reg, raw) for reg, old, raw in zip(regs, current, updated) if old != raw]
 
 
+def plan_bit_write(current: int, value: Value, on: bool) -> int:
+    """Return the new raw content of the register holding the bit `value`.
+
+    `on` is the logical state (after applying `invert`).
+    """
+    if value.kind != "bit":
+        raise ValueError("Not a bit value")
+    shift = (value.offset % 2) * 8 + value.bit
+    raw_bit = on != value.invert
+    return (current | (1 << shift)) if raw_bit else (current & ~(1 << shift) & 0xFFFF)
+
+
 class NeoreDevice:
     """NeoRé heat pump on a backend-neutral ``modbus_connection.ModbusUnit``.
 
@@ -235,3 +260,16 @@ class NeoreDevice:
             await self.unit.write_register(reg, raw)
         after = await self.unit.read_holding_registers(regs[0], len(regs))
         return decode_value(dict(zip(regs, after)), value)
+
+    async def async_write_bit(self, key: str, on: bool) -> bool | None:
+        """Read-modify-write a single setting bit and return the state read back."""
+        if key not in WRITABLE_BITS:
+            raise ValueError(f"{key} is not writable")
+        value = VALUES[key]
+        reg = value.registers.start
+        (current,) = await self.unit.read_holding_registers(reg, 1)
+        new = plan_bit_write(current, value, on)
+        if new != current:
+            await self.unit.write_register(reg, new)
+        (after,) = await self.unit.read_holding_registers(reg, 1)
+        return decode_value({reg: after}, value)

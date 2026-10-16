@@ -4,3 +4,7 @@ __pycache__/
 .vscode/
 .idea/
 *.log
+
+# local release helper (not part of the integration)
+release.bat
+release-notes.md

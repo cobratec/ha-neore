@@ -64,6 +64,17 @@ Offset = bajtový offset v paměti, registry = které registry hodnota zabírá.
 | 607 | 303–305 | float | Velikost IQ korekce |
 | 2243–2245 | | uint8 ×3 | Hodiny řídicí jednotky (h, min, s) |
 
+### Nastavení (bity, zapisovatelné)
+
+Zjištěno z webových stránek řídicí jednotky (přepínače na stránkách Objekt, TUV a TUV 2).
+
+| Bit | Registr | Význam |
+|---|---|---|
+| 572.0 | 286, bit 0 | Objekt: Sledovat sazbu – **inverzní** (0 = topení ve vysokém tarifu blokováno) |
+| 97.0 | 48, bit 8 | TUV: Sledovat sazbu pro ohřev TUV – **inverzní** (0 = ohřev TUV ve vysokém tarifu blokován) |
+| 395.0 | 197, bit 8 | TUV: Desinfekce (1 = zapnuto) |
+| 343.0 | 171, bit 8 | TUV 2: Cirkulace TUV (1 = zapnuto; chod podle časového programu cirkulace) |
+
 ### Stavové bity
 
 Popisy podle panelu. „Inverzní“ znamená, že panel zobrazuje popisek, když je bit 0.
@@ -86,7 +97,7 @@ Popisy podle panelu. „Inverzní“ znamená, že panel zobrazuje popisek, kdy�
 | 601.1 | Slave |
 | 2294.2 | Bazén ohřev |
 | 2603.0 | Oběhové čerpadlo topení |
-| 2603.5 | Oběhové čerpadlo / ventil TUV (ikona) |
+| 2603.5 | Ikona čerpadla v sekci TUV na přehledu webu – pravděpodobně cirkulační čerpadlo TUV (ověřuje se) |
 | 2603.6 / 2603.7 | Bivalence 1. / 2. stupeň |
 | 805.0 | Vysoušení podlah |
 | 2230.1 | Příliš nízká venkovní teplota – topí jen bivalentní zdroj (ikona) |
@@ -96,7 +107,7 @@ Popisy podle panelu. „Inverzní“ znamená, že panel zobrazuje popisek, kdy�
 | 8768.0 | Antilegionella – el. ohřev zásobníku (ikona legionely; podle manuálu sobota 1:00–10:00) |
 | 10302.0 | Protizámrazová ochrana |
 | 18440.0 | Odvzdušnění |
-| 18440.2 | Odtávání (ikona) – jen s komunikačním modulem MX; u splitu Fujitsu bez modulu stále 0 |
+| 18440.2 | Odtávání (ikona) – jen s komunikačním modulem MX (venkovní jednotky Toshiba); u Fujitsu stále 0 |
 
 ### Texty a poruchy
 
@@ -145,6 +156,7 @@ zachované.
   a přežije restart.
 - **Požadovaná T objektu** (offset 413): mění se registry 206 a 207. Ověřeno.
 - **Ekvitermní křivka** (offsety 47–59): pro celé stupně se mění jeden registr. Ověřeno.
+- **Bity nastavení** (sledování sazby, dezinfekce, cirkulace): read-modify-write jednoho registru funkcí 6, ostatní bity registru zůstanou zachované.
 
 | T TUV °C | registr 1 |
 |---|---|
@@ -168,6 +180,10 @@ do paměti s omezeným počtem zápisů – nezapisujte periodicky, jen při zm�
   v poloze TUV a oběhové čerpadlo vede vodu přes výměník v bojleru – bojler tak ztrácí
   ~0,7 kW tepla, dokud požadavek neskončí (setpoint, vysoký tarif nebo el. dohřev).
 - Ohřev TUV začíná při poklesu pod *setpoint − hystereze*.
-- Servisní obrazovka „Data venkovní jednotky“ (teploty, otáčky, BDEF odtávání) je bez
-  komunikačního modulu MX prázdná – regulace s jednotkou Fujitsu komunikuje jen přes
-  požadavek výkonu.
+- Servisní obrazovka „Data venkovní jednotky“ (teploty, otáčky, BDEF odtávání) a volba
+  „MX kom. jednotka“ jsou podle manuálu aktivní jen pro venkovní jednotky Toshiba s komunikačním
+  modulem MX. Jednotka Fujitsu je připojena na svorky XL-1, XN-2, XC-3 („komunikace s venkovní
+  jednotkou“) a regulace z ní tyto údaje nedostává.
+- „Opět. start“ (servisní nastavení 1) omezuje starty venkovní jednotky: když požadovaný výkon
+  klesne na „Práh opět. start.“ (4 %), jednotka se vypne a spustí se časovač, před jehož
+  uplynutím znovu nenaběhne. Manuál uvádí výchozí hodnotu 10 min.

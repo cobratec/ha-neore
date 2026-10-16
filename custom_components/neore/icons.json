@@ -164,6 +164,12 @@
         "state": {
           "on": "mdi:hair-dryer"
         }
+      },
+      "hot_water_circulation_running": {
+        "default": "mdi:pump-off",
+        "state": {
+          "on": "mdi:pump"
+        }
       }
     },
     "number": {
@@ -184,6 +190,34 @@
       },
       "curve_p19": {
         "default": "mdi:chart-line"
+      }
+    },
+    "switch": {
+      "heating_follow_tariff": {
+        "default": "mdi:radiator",
+        "state": {
+          "on": "mdi:clock-time-four-outline"
+        }
+      },
+      "hot_water_follow_tariff": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "on": "mdi:clock-time-four-outline"
+        }
+      },
+      "disinfection_enabled": {
+        "default": "mdi:bacteria-outline",
+        "state": {
+          "off": "mdi:bacteria-outline",
+          "on": "mdi:bacteria"
+        }
+      },
+      "circulation_enabled": {
+        "default": "mdi:water-sync",
+        "state": {
+          "off": "mdi:water-off-outline",
+          "on": "mdi:water-sync"
+        }
       }
     }
   }

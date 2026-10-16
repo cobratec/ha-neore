@@ -164,6 +164,9 @@
       },
       "floor_drying": {
         "name": "Vysoušení podlahy"
+      },
+      "hot_water_circulation_running": {
+        "name": "Cirkulační čerpadlo TUV"
       }
     },
     "number": {
@@ -189,6 +192,20 @@
     "water_heater": {
       "hot_water": {
         "name": "Teplá voda"
+      }
+    },
+    "switch": {
+      "heating_follow_tariff": {
+        "name": "Topení sleduje sazbu"
+      },
+      "hot_water_follow_tariff": {
+        "name": "TUV sleduje sazbu"
+      },
+      "disinfection_enabled": {
+        "name": "Dezinfekce TUV"
+      },
+      "circulation_enabled": {
+        "name": "Cirkulace TUV"
       }
     }
   }

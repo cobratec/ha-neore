@@ -47,6 +47,7 @@ BINARY_SENSORS: tuple[NeoreBinaryDescription, ...] = (
     _d("bivalence_stage_1", R, D),
     _d("bivalence_stage_2", R, D),
     _d("circulation_pump_running", R),
+    _d("hot_water_circulation_running", R),
     _d("high_tariff"),
     _d("hot_water_high_tariff", None, D),
     _d("hot_water_time_blocked", None, D),

@@ -25,6 +25,9 @@ třeba pro ukládání přebytků z fotovoltaiky do bojleru.
 | Požadovaná teplota TUV | `number` | totéž jako číslo – pohodlné v automatizacích |
 | Požadovaná teplota objektu | `number` | cílová teplota v místnosti (krok 0,1 °C) |
 | Ekvitermní křivka −20 / −7 / +6 / +19 °C | `number` (konfigurace) | teploty topné vody hlavního okruhu |
+| Topení sleduje sazbu, TUV sleduje sazbu | `switch` (konfigurace) | blokace topení / ohřevu TUV ve vysokém tarifu (HDO) |
+| Dezinfekce TUV | `switch` (konfigurace) | zapnutí týdenní dezinfekce bojleru |
+| Cirkulace TUV | `switch` (konfigurace) | povolení cirkulace TUV (běží podle časového programu v regulaci) |
 | Venkovní / vnitřní teplota | `sensor` | °C |
 | Teplota výstupu / zpátečky | `sensor` | °C |
 | Teplota TUV | `sensor` | °C |
@@ -40,9 +43,9 @@ třeba pro ukládání přebytků z fotovoltaiky do bojleru.
 | Hystereze TUV, teplota dezinfekce, zpoždění el. dohřevu | `sensor` (diagnostika) | aktuální nastavení |
 | Stavový kód, Popis stavu | `sensor` (diagnostika) | kód a texty jako na displeji, např. `0073` |
 | Porucha | `binary_sensor` | zapnuto, když čerpadlo hlásí poruchu |
-| Chod, Ohřev TUV, El. dohřev TUV, Bivalence, Oběhové čerpadlo | `binary_sensor` | stav provozu |
+| Chod, Ohřev TUV, El. dohřev TUV, Bivalence, Oběhové čerpadlo, Cirkulační čerpadlo TUV | `binary_sensor` | stav provozu |
 | Vysoký tarif, Útlum, Dezinfekce | `binary_sensor` | stav provozu |
-| Odtávání | `binary_sensor` (ve výchozím stavu vypnuto) | jen s komunikačním modulem MX, viz níže |
+| Odtávání | `binary_sensor` (ve výchozím stavu vypnuto) | jen s komunikačním modulem MX (venkovní jednotky Toshiba), viz níže |
 | Další stavy | `binary_sensor` (diagnostika) | topení/TUV zapnuto, stupně bivalence, zahřívání, protizámrazová ochrana, odvzdušnění |
 
 ### Jak číst stav provozu
@@ -57,9 +60,9 @@ třeba pro ukládání přebytků z fotovoltaiky do bojleru.
 - **Dodané teplo** je čítač kalorimetru čerpadla. Teplo odebrané zpět z vody (odtávání,
   oběh přes bojler při stojícím kompresoru) kalorimetr odečítá, čítač proto může krátce
   klesnout. Entita má `state_class: total`, Energy dashboard i `utility_meter` to zvládají.
-- **Odtávání:** u split jednotek (Fujitsu) řídí odtávání venkovní jednotka. Bez komunikačního
-  modulu MX (servisní menu: „MX kom. jednotka“ = 0) o něm regulace neví a bit se nikdy
-  nenastaví, proto je entita ve výchozím stavu vypnutá. Odtávání je vidět jako krátký
+- **Odtávání:** řídí ho venkovní jednotka. Regulace ho hlásí jen s komunikačním modulem MX,
+  který je podle manuálu určen pouze pro venkovní jednotky Toshiba. U jednotek Fujitsu se bit
+  nikdy nenastaví, proto je entita ve výchozím stavu vypnutá. Odtávání je vidět jako krátký
   (2–3 min) hluboký propad tepelného výkonu do záporných hodnot.
 
 Komunikace běží přes sdílené Modbus spojení vestavěné integrace `modbus` (knihovna `modbus-connection`). Čerpadlo se proto zobrazí v panelu **Nastavení → Konektivita → Modbus** a s ostatními integracemi se stejnými parametry sdílí jedno spojení. Logika zařízení je v `device.py` bez závislosti na Home Assistantu.
@@ -187,6 +190,9 @@ ohřev ukončí, jakmile kompresor dojde na ochrannou teplotu výstupu.
 
 Pokud měříte příkon čerpadla (např. Shelly), lze z denních přírůstků **Dodaného tepla**
 a odebrané elektřiny spočítat skutečný COP, třeba přes dva `utility_meter` a template senzor.
+
+Přepínače (sledování sazby, dezinfekce, cirkulace) mění parametry řídicí jednotky stejně jako panel. Nejsou určené
+pro časté přepínání z automatizací – parametry se ukládají do paměti s omezeným počtem zápisů.
 
 Integrace zapisuje jen při skutečné změně hodnoty, takže opakované volání se stejnou
 teplotou paměť řídicí jednotky nezatěžuje. Po zápisu hodnotu ověří zpětným čtením

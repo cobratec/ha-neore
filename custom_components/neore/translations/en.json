@@ -164,6 +164,9 @@
       },
       "floor_drying": {
         "name": "Floor drying"
+      },
+      "hot_water_circulation_running": {
+        "name": "Hot water circulation pump"
       }
     },
     "number": {
@@ -189,6 +192,20 @@
     "water_heater": {
       "hot_water": {
         "name": "Hot water"
+      }
+    },
+    "switch": {
+      "heating_follow_tariff": {
+        "name": "Heating follows tariff"
+      },
+      "hot_water_follow_tariff": {
+        "name": "Hot water follows tariff"
+      },
+      "disinfection_enabled": {
+        "name": "Hot water disinfection"
+      },
+      "circulation_enabled": {
+        "name": "Hot water circulation"
       }
     }
   }

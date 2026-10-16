@@ -73,3 +73,20 @@ class NeoreCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise HomeAssistantError(
                 f"Heat pump did not accept {key} = {value} (reads {readback})"
             )
+
+    async def async_set_switch(self, key: str, on: bool) -> None:
+        """Write a setting bit (only when it changes) and verify the read-back."""
+        if (self.data or {}).get(key) is on:
+            return
+
+        try:
+            readback = await self.device.async_write_bit(key, on)
+        except (ModbusError, ValueError) as err:
+            raise HomeAssistantError(f"Writing {key} failed: {err}") from err
+
+        await asyncio.sleep(0.5)
+        await self.async_refresh()
+        if readback is not on:
+            raise HomeAssistantError(
+                f"Heat pump did not accept {key} = {on} (reads {readback})"
+            )
